@@ -1,4 +1,17 @@
 def run(self):
+    
+    self.player.calculate_movement_options(self.map_w, self.map_h)
+    self.clear
+
+    self.game_map.display_map()
+    self.decorate()
+    self.player.health_bar.draw()
+    self.decorate(True)
+    self.game_map.display_movement_options(self.player_movement_options)
+
+    self.player.get_movement_input() 
+
+
     while True:
         self.Clear()
 
@@ -9,14 +22,7 @@ def run(self):
             input("Game Over")
             break
         
-        self.player.calculate_movement_options(self.map_w, self.map_h)
-
-        self.game_map_update_map(self.player.pos, self.player.marker)
-
-        self.game_map.display_map()
-        self.game_map.display_movement_options(self.player_movement_options)
-
-        self.player.get_movement_input() 
+       
 
 
 def run (self) -> None:
