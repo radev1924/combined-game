@@ -31,3 +31,17 @@ def run (self) -> None:
         self.display()
         self.display_ui()
         pygame.display.update()
+
+def check_events(self) -> None:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            exit()
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_w and self.player.movement_options_get("up"):
+                self.player.pos[1] -= 1
+            elif event.key == pygame.K_s and self.player.movement_options_get("down"):
+                self.player.pos[1] += 1
+            elif event.key == pygame.K_a and self.player.movement_options_get("left"):
+                self.player.pos[0] -= 1
+            elif event.key == pygame.K_d and self.player.movement_options_get("right"):
+                self.player.pos[0] += 1
