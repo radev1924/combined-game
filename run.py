@@ -19,3 +19,15 @@ def run(self):
         self.player.get_movement_input() 
 
 
+def run (self) -> None:
+    while True:
+        self.check_events()
+
+        if self.player.health <= 0:
+            break
+
+        self.player.calculate_movement_options(self.map_w, self.map_h)
+        self.game_map.pdate_map(self.player.pos, self.player.marker)
+        self.display()
+        self.display_ui()
+        pygame.display.update()
