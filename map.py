@@ -99,3 +99,14 @@ class Map:
                         revealed_tile = self.init_map_data[tile_y][tile_x]
                         if revealed_tile not in self.explored_tiles:
                             self.explored_tiles.append(revealed_tile)
+
+    def display(self) -> None:
+        self.screen.fill("black")
+
+        for i, row in enumerate(self.game_map.map_data):
+            for j, tile in enumerate(row):
+                if self.game_map.exploration_process[i][j]:
+                    self.canvas.blit(tile, image, (j * self.tile_size, i * self.tile_size))
+        self.screen.blit(self.map_background, (0, 0))
+        self.screen.blit(pygame.transform.scale2x(self.canvas),(self.tile_size, self.tile_size))
+     
