@@ -32,6 +32,13 @@ def run (self) -> None:
         self.display_ui()
         pygame.display.update()
 
+def next_turn (self) -> None:
+    self.player.attack(self.enemy_in_combat)
+    self.enemy_in_combat.attack(self.player)
+
+    if self.player.health <= 0 or self.enemy_in_combat.health <= 0:
+        self.enemy_in_combat None
+
 def check_events(self) -> None:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
