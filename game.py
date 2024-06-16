@@ -60,3 +60,16 @@ class Pygamemode(Game)
         for row in self.init.map_data:
             for tile in row:
                 tile.load.image()
+
+      def display_ui(self) -> None:
+        self.draw_text(self.player.name, (self.screen_width / 2, self.screen_height - 110))
+        self.draw_health_bar(self.player.health, self.player.health_max, (40, 200, 40), self.screen_height - 95)
+
+        if self.enemy_in_combat:
+            self.draw_text("[ENTER] - ATTACK", (self.screen_width - 40, self.screen_height - 105), "right")
+            self.draw_text(self.enemy_in_combat.name, (self.screen_width / 2, self.screen_height - 55))
+            self.draw_health_bar(self.enemy_in_combat.health, self.enemy_in_combat.health_max, (200, 40, 40), self.screen_height - 40)
+        else:
+            for index, (direction, value) in enumerate(self.game_map.movement_options.items()):
+                if self.player.movement_options.get(direction):
+                    self.draw_text(value, (40, self.screen_height - 105 + index * 22), "left")
