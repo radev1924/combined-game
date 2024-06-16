@@ -39,9 +39,20 @@ def check_events(self) -> None:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_w and self.player.movement_options_get("up"):
                 self.player.pos[1] -= 1
+                self.enemy_in_combat = self.spawn_enemy(self.player.pos)
             elif event.key == pygame.K_s and self.player.movement_options_get("down"):
                 self.player.pos[1] += 1
+                self.enemy_in_combat = self.spawn_enemy(self.player.pos)
             elif event.key == pygame.K_a and self.player.movement_options_get("left"):
                 self.player.pos[0] -= 1
+                self.enemy_in_combat = self.spawn_enemy(self.player.pos)
             elif event.key == pygame.K_d and self.player.movement_options_get("right"):
                 self.player.pos[0] += 1
+                self.enemy_in_combat = self.spawn_enemy(self.player.pos)
+
+            if self.enemy_in_combat:
+                if event.key == pygame.K_RETURN:
+                    self.next_turn()
+            elif:
+                self.check_movement_inputs(event)
+        

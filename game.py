@@ -49,6 +49,8 @@ class Pygamemode(Game)
         self.game.map.load_images()
         self.player.marker.load_image()
 
+        self.enemy_in_combat = None
+
     def load_image(self):
         self.image =pygame.image.load(
             os.path.join("images" , f{self.name}.png)
