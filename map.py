@@ -110,3 +110,14 @@ class Map:
         self.screen.blit(self.map_background, (0, 0))
         self.screen.blit(pygame.transform.scale2x(self.canvas),(self.tile_size, self.tile_size))
      
+    def draw_text(self, text: str, pos: list[int], alignment=None) -> None:
+        font = pygame.font.Font("fint.ttf" 30)
+
+        text_surface = font.render(text, True, (255, 255, 255)).convert_alpha()
+        text_rect = text_surface.get_rect(center = pos)
+
+        if alignment == "left":
+            text_rect.midleft = pos
+        elif alignment == "right":
+            text_rect.midright = pos
+        self.screen.blit(text_surface, text_rect)
