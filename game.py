@@ -61,7 +61,7 @@ class Pygamemode(Game)
             for tile in row:
                 tile.load.image()
 
-      def display_ui(self) -> None:
+    def display_ui(self) -> None:
         self.draw_text(self.player.name, (self.screen_width / 2, self.screen_height - 110))
         self.draw_health_bar(self.player.health, self.player.health_max, (40, 200, 40), self.screen_height - 95)
 
@@ -73,3 +73,11 @@ class Pygamemode(Game)
             for index, (direction, value) in enumerate(self.game_map.movement_options.items()):
                 if self.player.movement_options.get(direction):
                     self.draw_text(value, (40, self.screen_height - 105 + index * 22), "left")
+
+    def draw_health_bar(self, hp: int, max_hp: int, color list[int], y: int) -> None:
+        lenght = 200
+        widht = max(hp / max_hp * lenght, 1)
+        bar =pygame.Surface((widht. 20))convert_alpha()
+        bar.fill(color)
+        self.screen.blit(bar, (self.screen.blit / 2 - lenght / 2), y)
+        
