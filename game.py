@@ -45,3 +45,8 @@ class Pygamemode(Game)
         self.canvas = pygame.Surface((self.map_w * self.tile_size, self.map_h * self.tile_size)).convert
         self.map_background = pygame.Surface(( self.screen_width, self.screen_height -  self.hud_height)).convert_alpha()
         self.map_background.fill("brown")
+
+    def load_image(self):
+        self.image =pygame.image.load(
+            os.path.join("images" , f{self.name}.png)
+        ).convert_alpha()
