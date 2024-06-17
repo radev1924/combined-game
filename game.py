@@ -80,4 +80,7 @@ class Pygamemode(Game)
         bar =pygame.Surface((widht. 20))convert_alpha()
         bar.fill(color)
         self.screen.blit(bar, (self.screen.blit / 2 - lenght / 2), y)
-        
+
+class CombinedMode(PygameMode)
+    def __init__(self. map_w: int = 30, map_h: int = 15) -> None:
+        super().__init__(map_w, map_w)
