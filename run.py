@@ -19,19 +19,3 @@ def run(self):
         self.player.get_movement_input() 
 
 
-def spawn_enemy(self, pos: list [i nt]) —> Enemy I None:
-x, Y = pos
-chance
-= randint(l, 100)
-tile =
-sel f. game_map. i ni t_map_data [y] [x]
-if chance < SPAWN_CHANCE and tile. name != "water":
-return deepcopy(choi ce (enemi es))
-
-def spawn_enemy(self, pos:list [int]) -> Enemy : None
-
-    x, y = pos
-    chance =randint(1,100)
-    tile = self.game_map.init_map_data[x][y]
-    if chance < SPAWN_CHANCE and tile.name != "water"
-        return deepCopy(choice_enemies)
