@@ -16,4 +16,4 @@ def run(self):
         self.game_map.display_map()
         self.game_map.display_movement_options(self.player_movement_options)
 
-        self.player.get_movement_input()
+        self.player.get_movement_input() z
