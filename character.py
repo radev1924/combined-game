@@ -15,11 +15,14 @@ class Character:
         target.health_bar.update()
         print (f"{self.name} dealt {self.weapon.damage} damage to {target.name} with {self.weapon.name}")
 
-class Hero(Character):
-        def __init__(self, name: str, health: int) -> None:
+class Player(Character):
+        def __init__(self, name: str = "Player", health: int = 100) -> None:
             super().__init__(name=name, health=health)          
             self.default_weapon = self.weapon
             self.health_bar = HealthBar(self, color="blue")
+            self.pos = [0,0]
+            self.marker = player_marker
+            self.movement_options: dict [str, bool]
 
         def equip(self, weapon) -> None:
             self.weapon = weapon
