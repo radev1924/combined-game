@@ -1,37 +1,57 @@
+# Standard library imports
 from random import randint
-from tile import Tile, plains, forest, pines, mountain, water
+
+# Local folder imports
+from tile import (
+    forest,
+    mountain,
+    pines,
+    plains,
+    player_marker,
+    town,
+    water,
+    Tile
+)
 
 
 class Map:
-    def __init__(self, width: int, height: int) -> None:
+    def __init__(self, width, height) -> None:
         self.width = width
         self.height = height
 
         self.init_map_data: list[list[str]]
         self.full_map_data: list[[str]]
-        self.map_data: list[list[Tile]]
-        self.exporation_process: [player]
+        self.map_data: list[[str]]
+        self.exploration_process: list[list[int]]
 
         self.generate_map()
-        self.generate_patch(forest, 2, 5, 7)
-        self.generate_patch(pines, 2, 2, 5)
-        self.generate_patch(mountain, 3, 5, 7)
-        self.generate_patch(water, 1, 10, 12)
-        self.generate_patch(town, 3, 3, 3)
+        self.generate_patch(forest, 3, 3, 7)
+        self.generate_patch(pines, 3, 3, 7)
+        self.generate_patch(mountain, 3, 3, 7)
+        self.generate_patch(water, 2, 3, 10)
+        self.generate_patch(town, 1, 3, 3)
 
-        self.movement_options = {...}
+        self.movement_options = {
+            "up": "[W] - UP",
+            "down": "[S] - DOWN",
+            "left": "[A] - LEFT",
+            "right": "[D] - RIGHT"
+        }
 
-        self.explored_tiles = [player]
+        self.explored_tiles = [player_marker]
+
+    def load_images(self) -> None:
+        for row in self.init_map_data:
+            for tile in row:
+                tile.load_image()
+
+        self.copy_map()
 
     def generate_map(self) -> None:
-        self.init_map_data = [[plains.colored_symbol for _ in range(self.width)] for _ in range(self.height)]
-        self.map_data = deepcopy(self.init_map_data)
-        self.exploration_process =[[0 for _ in range (self.width)] for _ in range(self.height)]
+        self.init_map_data = [[plains for _ in range(self.width)] for _ in range(self.height)]
+        self.copy_map()
 
-    def update_map(self, pos: list[int], marker: Tile) -> None:
-        x, y = pos
-        self.map_data = deepcopy(self.init_map_data)
-        self.map_data[y][x] = marker.colored_symbol
+        self.exploration_process = [[0 for _ in range(self.width)] for _ in range(self.height)]
 
     def generate_patch(
             self,
@@ -39,44 +59,29 @@ class Map:
             num_patches: int,
             min_size: int,
             max_size: int,
-            irregular: bool = True
+            irregular: int = True
     ) -> None:
         for _ in range(num_patches):
-            width = randint(min_size, max_size)
-            height = randint(min_size, max_size)
-            start_x = randint(1, self.width - width - 1)
-            start_y = randint(1, self.height - height - 1)
+            size_y = randint(min_size, max_size)  # height of patch
+            size_x = randint(min_size, max_size)  # width of patch
+            start_y = randint(1, self.height - size_y - 1)  # top row
+            start_x = randint(1, self.width - size_x - 1)  # start of row
 
             if irregular:
-                init_start_x = randint(3, self.width - max_size)
+                raw_start_x = randint(3, self.width - max_size)  # start of row
 
-            for i in range(height):
+            for i in range(size_y):
                 if irregular:
-                    width = randint(int(0.7 * max_size), max_size)
-                    start_x = init_start_x - randint(1, 2)
-                for j in range(width):
-                    self.map_data[start_y + i][start_x + j] = tile
+                    size_x = randint(int(0.7 * max_size), max_size)  # randomized width of row
+                    start_x = raw_start_x - randint(1, 2)  # randomized start of row
+                for j in range(size_x):
+                    self.init_map_data[start_y + i][start_x + j] = tile
+        self.copy_map()
 
-    def display_map(self) -> None:
-        frame = "x" + self.width * "=" + "x"
-        print(frame)
-
-        for y_index, (row, explored_row) in enumerate(zip(self.map_data, self.exploration_process)):
-
-            if y_index in range(len(self.explored_tiles)):
-                legend = self.explored_tiles[y_index].colored_legend
-            else
-                legend = ""
-
-            print(
-                "|" + "".join(
-                    [
-                        tile.colored_symbol if is_explored else " "
-                        for tile, is_explored in zip(row, explored_row)
-                    ]
-                ) + "|" + legend
-            )
-        print(frame)
+    def display_movement_options(self, options: dict[str, bool]) -> None:
+        for direction, value in self.movement_options.items():
+            if options.get(direction):
+                print(value)
 
     def reveal_map(self, pos: list[int]) -> None:
         x, y = pos
@@ -100,24 +105,29 @@ class Map:
                         if revealed_tile not in self.explored_tiles:
                             self.explored_tiles.append(revealed_tile)
 
-    def display(self) -> None:
-        self.screen.fill("black")
+    def update_map(self, pos: list[int], marker: Tile) -> None:
+        x, y = pos
+        self.copy_map()
+        self.reveal_map(pos)
+        self.map_data[y][x] = marker
 
-        for i, row in enumerate(self.game_map.map_data):
-            for j, tile in enumerate(row):
-                if self.game_map.exploration_process[i][j]:
-                    self.canvas.blit(tile, image, (j * self.tile_size, i * self.tile_size))
-        self.screen.blit(self.map_background, (0, 0))
-        self.screen.blit(pygame.transform.scale2x(self.canvas),(self.tile_size, self.tile_size))
-     
-    def draw_text(self, text: str, pos: list[int], alignment=None) -> None:
-        font = pygame.font.Font("fint.ttf" 30)
+    def display_map(self) -> None:
+        frame = "x" + self.width * "=" + "x"
+        print(frame)
+        for y_index, (row, explored_row) in enumerate(zip(self.map_data, self.exploration_process)):
+            if y_index in range(len(self.explored_tiles)):
+                legend = self.explored_tiles[y_index].colored_legend
+            else:
+                legend = ""
 
-        text_surface = font.render(text, True, (255, 255, 255)).convert_alpha()
-        text_rect = text_surface.get_rect(center = pos)
+            print(
+                "|" + "".join(
+                    [
+                        tile.colored_symbol if is_explored else " " for tile, is_explored in zip(row, explored_row)
+                    ]
+                ) + "| " + legend
+            )
+        print(frame)
 
-        if alignment == "left":
-            text_rect.midleft = pos
-        elif alignment == "right":
-            text_rect.midright = pos
-        self.screen.blit(text_surface, text_rect)
+    def copy_map(self) -> None:
+        self.map_data = [list(row) for row in self.init_map_data]
