@@ -43,8 +43,3 @@ Welcome to Roguelike Python Game, an exciting text-based adventure game where pl
 ![image](https://github.com/radev1924/combined-game/assets/26287242/e9340a0b-954e-4cce-86d4-a611ad73a1c1)
 ![image](https://github.com/radev1924/combined-game/assets/26287242/90b6f2f3-5946-40fd-a78f-1362d4a7f242)
 
-## License
-
-This project is licensed under the [MIT License](https://github.com/yourusername/your-repo/blob/main/LICENSE).
-
----
